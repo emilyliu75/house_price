@@ -39,7 +39,7 @@ PROP_TYPE_MAP = {
 ESTATE_TYPE_MAP = {
     "L": "Leasehold", "F": "Freehold",
 }
-MANDATORY = ["price_paid", "deed_date"]
+MANDATORY = ["price_paid", "deed_date", "postcode"]
 
 def remove_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df.dropna(subset=MANDATORY)
