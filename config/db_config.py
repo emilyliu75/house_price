@@ -58,3 +58,13 @@ def validate_db_config(config):
                 raise DatabaseConfigError(
                     f"Configuration error: {db_key} {key} is set to 'error'"
                 )
+
+
+def build_db_url(db_config: Dict[str, str]) -> str:
+    """
+    Build a PostgreSQL connection URL from DB config values.
+    """
+    return (
+        f"postgresql://{db_config['user']}:{db_config['password']}@"
+        f"{db_config['host']}:{db_config['port']}/{db_config['dbname']}"
+    )
