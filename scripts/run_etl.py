@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from config.env_config import setup_env
+from etl.config.env_config import setup_env
 from etl.extract.extract import extract_data
 from etl.transform.transform import transform_data
 from etl.load.load import load_data
