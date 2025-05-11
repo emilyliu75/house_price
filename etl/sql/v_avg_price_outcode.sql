@@ -4,4 +4,5 @@ SELECT
   ROUND(AVG(price))          AS avg_price,
   COUNT(*)                   AS n_sales
 FROM clean_house_prices
-GROUP BY outcode;
+GROUP BY outcode
+ORDER BY outcode DESC;

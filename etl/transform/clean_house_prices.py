@@ -24,7 +24,8 @@ KEEP_AND_RENAME = {
     "saon":         "saon",
     "paon":         "paon",
     "street":       "street",
-    "borough":      "borough",   # added in extract step
+    "borough":      "borough",
+    'transaction_category': 'transaction_category',
 }
 
 # lookup tables for mapping raw codes to human-readable text
@@ -74,6 +75,9 @@ def map_codes(df: pd.DataFrame) -> pd.DataFrame:
         df["estate_type"]   = df["estate_type"].map(ESTATE_TYPE_MAP).fillna(df["estate_type"])
     return df
 
+def remove_other_types(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop all rows where property_type == 'Other'."""
+    return df[df["property_type"] != "Other"]
 
 def build_address(df: pd.DataFrame) -> pd.DataFrame:
     """Compose saon + paon + street then drop the parts."""
@@ -94,6 +98,8 @@ def deduplicate(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Removed %d duplicate rows", before - len(df))
     return df
 
+def remove_non_standard_transaction(df: pd.DataFrame) -> pd.DataFrame:
+     return df[df["transaction_category"] != "B"]
 
 def clean_house_prices(df_raw: pd.DataFrame) -> pd.DataFrame:
     logger.info("▶︎ Cleaning house-price data …")
@@ -104,66 +110,16 @@ def clean_house_prices(df_raw: pd.DataFrame) -> pd.DataFrame:
         .pipe(select_and_rename)
         .pipe(standardise_types)
         .pipe(map_codes)
+        .pipe(remove_other_types)
         .pipe(build_address)
         .pipe(deduplicate)
+        .pipe(remove_non_standard_transaction)
     )
 
     logger.info("✓ Clean complete - final shape %s", df.shape)
+    print("Columns after cleaning:", df.columns.tolist())
+
     return df
 
 
 
-# def normalise_headers(df: pd.DataFrame) -> pd.DataFrame:
-#     # change all column names to lower case and strip whitespace
-#     return df.rename(columns=lambda c: c.strip().lower())
-
-# def _normalise_cols(df: pd.DataFrame) -> pd.DataFrame:
-#     # change all column names to lower case and strip whitespace
-#     return df.rename(columns=lambda c: c.strip().lower())
-
-
-
-# def transform_house_prices(df_raw: pd.DataFrame) -> pd.DataFrame:
-#     # so that you can spot when the transform starts.
-#     logger.info("▶︎ Transform - keep 10 cols, map codes, de-duplicate")
-
-#     # normalise headers
-#     df_raw = _normalise_cols(df_raw)
-
-#     # 1️⃣  select & rename (tolerant of missing columns)
-
-#     # present is the columns that exist in the raw data and in KEEP_AND_RENAME
-#     # missing is the columns that are in KEEP_AND_RENAME but not in the raw data
-#     present = df_raw.columns.intersection(KEEP_AND_RENAME)
-#     missing = set(KEEP_AND_RENAME) - set(present)
-#     if missing:
-#         logger.warning("Missing cols dropped: %s", ", ".join(sorted(missing)))
-
-#     df = (
-#         df_raw
-#         .loc[:, present]
-#         .rename(columns={c: KEEP_AND_RENAME[c] for c in present})
-#     )
-
-#     # 2️⃣  map codes → human text
-#     if "property_type" in df:
-#         df["property_type"] = df["property_type"].map(PROP_TYPE_MAP).fillna(df["property_type"])
-#     if "estate_type" in df:
-#         df["estate_type"] = df["estate_type"].map(ESTATE_TYPE_MAP).fillna(df["estate_type"])
-
-#     # 3️⃣  convert price / date to numeric / date for analysis
-#     if "price" in df:
-#         df["price"] = pd.to_numeric(df["price"], errors="coerce")
-#     if "date" in df:
-#         df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
-
-
-#     # 4️⃣  drop rows lacking mandatory fields
-#     df = df.dropna(subset=[c for c in ("price", "date") if c in df.columns])
-
-#     # 5️⃣  de-duplicate considering ONLY the ten kept cols
-#     before = len(df)
-#     df = df.drop_duplicates()
-#     logger.info("Removed %d duplicate rows", before - len(df))
-#     logger.info("✓ Transform complete - final shape %s", df.shape)
-#     return df
