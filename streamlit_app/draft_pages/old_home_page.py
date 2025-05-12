@@ -1,6 +1,6 @@
 import streamlit as st
 st.set_page_config(
-    page_title="🏠 London House-Price Explorer",
+    page_title="London House-Price Explorer",
     page_icon="🏠",
     layout="wide"
 )
@@ -9,7 +9,7 @@ import altair as alt
 from sqlalchemy import text
 from streamlit_app.config import engine
 
-st.title("Overview of House Prices in London")
+st.title("🏠 London House-Price Explorer")
 @st.cache_data(ttl=3600)
 def load_raw_price_data() -> pd.DataFrame:
     sql = text("""
