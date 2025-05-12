@@ -1,7 +1,7 @@
 import os
 import sys
 import subprocess
-from config.env_config import setup_env
+from etl.config.env_config import setup_env
 
 # Define test directories and corresponding coverage targets
 TEST_CONFIG = {

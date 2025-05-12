@@ -40,7 +40,25 @@ def get_db_connection(connection_params):
 
 
 def create_db_engine(connection_params):
-    url = f"postgresql://{connection_params['user']}:{connection_params['password']}@{connection_params['host']}:{connection_params['port']}/{connection_params['dbname']}"
-    return create_engine(url, echo=False, hide_parameters=True)
+    try:
+        if (
+            not connection_params.get("user")
+            or not connection_params.get("dbname")
+            or not connection_params.get("host")
+            or not connection_params.get("port")
+        ):
+            raise ValueError("Parameter not provided")
 
+        engine = create_engine(
+            f"postgresql+psycopg2://{connection_params['user']}"
+            f":{connection_params['password']}@{connection_params['host']}"
+            f":{connection_params['port']}/{connection_params['dbname']}"
+        )
+        logger.setLevel(logging.INFO)
+        logger.info("Successfully created the database engine.")
+        return engine
+    except ValueError as e:
+        logger.setLevel(logging.ERROR)
+        logger.error(f"Invalid Connection Parameters: {e}")
+        raise DatabaseConnectionError(f"Invalid Connection Parameters: {e}")
 
