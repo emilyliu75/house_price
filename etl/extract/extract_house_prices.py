@@ -1,6 +1,5 @@
 """
 Extract raw house-price CSVs for five London boroughs (last five years).
-No cleaning here – just load and tag with `borough` column.
 """
 
 import os
