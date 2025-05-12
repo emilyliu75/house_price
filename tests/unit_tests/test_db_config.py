@@ -1,6 +1,6 @@
 import os
 import pytest
-from config.db_config import load_db_config, DatabaseConfigError
+from etl.config.db_config import load_db_config, DatabaseConfigError
 
 
 def test_load_db_config(mocker):
