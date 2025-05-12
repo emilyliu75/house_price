@@ -1,4 +1,4 @@
-import os
+# import os
 import pandas as pd
 import logging
 from sqlalchemy import text, Table, MetaData
@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import sessionmaker
 from etl.config.db_config import load_db_config, DatabaseConfigError
-from utils.db_utils import get_db_connection, DatabaseConnectionError
+from utils.db_utils import create_db_engine, DatabaseConnectionError
 from utils.logging_utils import setup_logger
 from utils.sql_utils import import_sql_query
 from etl.load.post_load_enrichment import enrich_database
@@ -18,27 +18,45 @@ logger = setup_logger(__name__, "database_query.log", level=logging.INFO)
 
 
 def load_data(df_clean: pd.DataFrame) -> None:
-    """Entry-point called by run_etl.py"""
-    conn = None
+    """
+    1) Drop any existing clean_house_prices table (cascade to drop dependents)
+    2) Create fresh via pandas.to_sql(if_exists='fail')
+    3) If it still exists, fall back to an INSERT … ON CONFLICT DO NOTHING
+    4) Run post-load enrichment (indexes + views)
+    """
     try:
-        conn = get_db_connection(load_db_config()["target_database"])
+        # load connection info and build an Engine
+        cfg = load_db_config()["target_database"]
+        engine = create_db_engine(cfg)
 
-        # create table if it doesn't exist
-        df_clean.to_sql(TARGET_TABLE, conn, if_exists="fail", index=False)
-        logger.info("Table %s created with %d rows", TARGET_TABLE, len(df_clean))
+        # 1) DROP old table + dependent views/indexes, committed immediately
+        with engine.begin() as conn:
+            conn.execute(text(f"DROP TABLE IF EXISTS {TARGET_TABLE} CASCADE;"))
+            logger.info("Dropped old table (and dependents) if it existed: %s", TARGET_TABLE)
+
+        # 2) Try to create brand-new table
+        df_clean.to_sql(
+            TARGET_TABLE,
+            engine,
+            if_exists="fail",  # raises ValueError if table still exists
+            index=False
+        )
+        logger.info("Created table %s with %d rows", TARGET_TABLE, len(df_clean))
 
     except ValueError:
-        logger.info("Table exists – inserting new rows only (DO NOTHING on conflict)")
-        _insert_ignore_duplicates(df_clean, conn)
+        # 3) Table still exists → bulk insert, skipping duplicates
+        logger.warning("%s already exists, inserting new rows only (DO NOTHING on conflict)", TARGET_TABLE)
+        _insert_ignore_duplicates(df_clean, engine)
 
     except (DatabaseConfigError, DatabaseConnectionError) as e:
-        logger.error("DB connection problem: %s", e)
+        logger.error("DB config/connection problem: %s", e)
         raise
 
-    finally:
-        if conn is not None:
-            conn.close()
-            logger.info("Database connection closed")
+    except Exception as e:
+        logger.error("Unexpected error in load_data: %s", e)
+        raise
+
+    # 4) Post-load enrichment (indexes & views)
 
     enrich_database()
 
