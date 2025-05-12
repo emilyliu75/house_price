@@ -30,27 +30,15 @@ def render():
         help="Choose one type or All"
     )
 
-    # 2) New-build status dropdown
-    # build_options = ["All", "New build", "Existing"]
-    # build_choice = st.selectbox(
-    #     "Filter by new-build status",
-    #     options=build_options,
-    #     index=0,
-    #     help="Show only new builds, only existing, or All"
-    # )
 
-    # 3) Apply filters
+    # 2) Apply filters
     df_sel = df.copy()
 
     if type_choice != "All":
         df_sel = df_sel[df_sel["property_type"] == type_choice]
 
-    # if build_choice == "New build":
-    #     df_sel = df_sel[df_sel["new_build"] == "Y"]
-    # elif build_choice == "Existing":
-    #     df_sel = df_sel[df_sel["new_build"] == "N"]
 
-    # 4) Aggregate by year & borough
+    # 3) Aggregate by year & borough
     df_trend = (
         df_sel
         .groupby(["year", "borough"], as_index=False)
@@ -61,7 +49,7 @@ def render():
     )
     df_trend["avg_price"] = df_trend["avg_price"].round()
 
-    # 5) Plot
+    # 4) Plot
     st.subheader("Average sale price by year and borough")
     chart = (
         alt.Chart(df_trend)
@@ -78,39 +66,3 @@ def render():
 
 if __name__ == "__main__":
     render()
-
-# import os
-# import sys
-
-# # Ensure project root is on sys.path so we can import etl/, utils/, config/, streamlit_app/…
-# proj_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-# if proj_root not in sys.path:
-#     sys.path.insert(0, proj_root)
-
-# import streamlit as st
-
-# from streamlit_app.pages.overview          import render as render_overview
-# from streamlit_app.pages.heatmap           import render as render_heatmap
-# from streamlit_app.pages.borough_analysis  import render as render_borough
-# from streamlit_app.pages.sdlt_effect   import render as render_sdlt
-# from streamlit_app.pages.flips         import render as render_flips
-# # from streamlit_app.pages.home          import render as render_home
-# # from streamlit_app.pages.top10         import render as render_top10
-
-# # If you add more pages, just import them here and add to PAGES
-# # PAGES = {
-# #     "Overview":           render_overview,
-# #     "Price heatmap":      render_heatmap,
-# #     "Borough breakdown":  render_borough,
-# #     "SDLT effect":        render_sdlt,
-# #     "Flips":              render_flips,
-# #     # "Top 10":             render_top10,
-# # }
-
-# st.title("London House-Price Explorer")
-# render_overview()
-# Sidebar for navigation
-# selection = st.sidebar.radio("Go to", list(PAGES.keys()))
-
-# Call the appropriate render function
-# PAGES[selection]()
