@@ -45,7 +45,6 @@ MANDATORY = ["price_paid", "deed_date", "postcode"]
 def remove_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df.dropna(subset=MANDATORY)
 
-
 def select_and_rename(df: pd.DataFrame) -> pd.DataFrame:
     df = df.rename(columns=lambda c: c.strip().lower())
     present = df.columns.intersection(KEEP_AND_RENAME)
@@ -56,6 +55,7 @@ def select_and_rename(df: pd.DataFrame) -> pd.DataFrame:
         df.loc[:, present]
           .rename(columns={c: KEEP_AND_RENAME[c] for c in present})
     )
+
 
 
 def standardise_types(df: pd.DataFrame) -> pd.DataFrame:
