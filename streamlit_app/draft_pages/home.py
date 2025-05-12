@@ -4,11 +4,11 @@ from sqlalchemy import text
 from streamlit_app.config import engine
 
 # Set a nice page title & icon
-st.set_page_config(
-    page_title="🏠 London House-Price Explorer",
-    page_icon="🏠",
-    layout="wide"
-)
+# st.set_page_config(
+#     page_title="🏠 London House-Price Explorer",
+#     page_icon="🏠",
+#     layout="wide"
+# )
 
 # ————————————————
 # 1) Title & Intro

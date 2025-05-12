@@ -1,13 +1,15 @@
-# streamlit_app/pages/overview.py
-
 import streamlit as st
+st.set_page_config(
+    page_title="🏠 London House-Price Explorer",
+    page_icon="🏠",
+    layout="wide"
+)
 import pandas as pd
 import altair as alt
 from sqlalchemy import text
 from streamlit_app.config import engine
 
 st.title("Overview of House Prices in London")
-
 @st.cache_data(ttl=3600)
 def load_raw_price_data() -> pd.DataFrame:
     sql = text("""
@@ -18,7 +20,11 @@ def load_raw_price_data() -> pd.DataFrame:
     df["year"] = pd.DatetimeIndex(df["date"]).year
     return df
 
+
 def render():
+    # overview
+
+
     df = load_raw_price_data()
 
     # 1) Property-type dropdown
