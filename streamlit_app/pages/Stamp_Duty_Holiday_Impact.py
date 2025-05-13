@@ -21,7 +21,7 @@ def get_monthly_volumes_by_borough() -> pd.DataFrame:
           (date_trunc('month', date))::date AS month,
           borough,
           COUNT(*)                        AS n_sales
-        FROM clean_house_prices
+        FROM emily_capstone
         WHERE date >= CURRENT_DATE - INTERVAL '5 years'
         GROUP BY month, borough
         ORDER BY month, borough;
@@ -32,7 +32,17 @@ def get_monthly_volumes_by_borough() -> pd.DataFrame:
     return df
 
 def render():
+    st.set_page_config(
+        page_title="Stamp Duty Holiday Impact",
+        page_icon="🏠",
+        layout="wide"
+    )
     st.subheader("Monthly Sales Volume by Borough (5-year view)")
+    st.markdown(
+        """
+        - Stamp Duty Holiday was introduced in July 2020 and ended in September 2021.
+        """
+    )
 
     df = get_monthly_volumes_by_borough()
     if df.empty:
