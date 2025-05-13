@@ -12,10 +12,10 @@ SQL_DIR = Path(__file__).parents[1] / "sql"
 # Configure the logger
 logger = setup_logger(__name__, "database_query.log", level=logging.DEBUG)
 
-TARGET_TABLE = "clean_house_prices"
+TARGET_TABLE = "emily_capstone"
 
 
-def enrich_database():
+def enrich_database(schema: str = 'public', engine=None):
     engine = create_db_engine(load_db_config()["target_database"])
     Session = sessionmaker(bind=engine)
     session = Session()

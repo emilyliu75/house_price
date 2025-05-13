@@ -48,11 +48,11 @@ def create_db_engine(connection_params):
             or not connection_params.get("port")
         ):
             raise ValueError("Parameter not provided")
-
+        schema = connection_params.get("schema", "public")
         engine = create_engine(
             f"postgresql+psycopg2://{connection_params['user']}"
             f":{connection_params['password']}@{connection_params['host']}"
-            f":{connection_params['port']}/{connection_params['dbname']}"
+            f":{connection_params['port']}/{connection_params['dbname']}?options=-csearch_path%3D{schema}"
         )
         logger.setLevel(logging.INFO)
         logger.info("Successfully created the database engine.")

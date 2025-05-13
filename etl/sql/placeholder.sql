@@ -2,6 +2,6 @@
 SELECT
     LEFT(postcode, 4)  AS outward_code,
     ROUND(AVG(price))  AS avg_price
-FROM   clean_house_prices
+FROM   emily_capstone
 GROUP  BY outward_code
 ORDER  BY avg_price DESC;
