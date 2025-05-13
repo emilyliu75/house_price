@@ -1,4 +1,4 @@
-# import os
+import os
 import pandas as pd
 import logging
 from sqlalchemy import text, Table, MetaData
@@ -11,7 +11,7 @@ from utils.logging_utils import setup_logger
 from utils.sql_utils import import_sql_query
 from etl.load.post_load_enrichment import enrich_database
 
-TARGET_TABLE = "clean_house_prices"
+TARGET_TABLE = "emily_capstone"
 
 # Configure the logger
 logger = setup_logger(__name__, "database_query.log", level=logging.INFO)
@@ -24,6 +24,7 @@ def load_data(df_clean: pd.DataFrame) -> None:
     3) If it still exists, fall back to an INSERT … ON CONFLICT DO NOTHING
     4) Run post-load enrichment (indexes + views)
     """
+    schema = os.getenv("TARGET_DB_SCHEMA", "public")
     try:
         # load connection info and build an Engine
         cfg = load_db_config()["target_database"]
@@ -31,7 +32,7 @@ def load_data(df_clean: pd.DataFrame) -> None:
 
         # 1) DROP old table + dependent views/indexes, committed immediately
         with engine.begin() as conn:
-            conn.execute(text(f"DROP TABLE IF EXISTS {TARGET_TABLE} CASCADE;"))
+            conn.execute(text(f"DROP TABLE IF EXISTS {schema}.{TARGET_TABLE} CASCADE;"))
             logger.info("Dropped old table (and dependents) if it existed: %s", TARGET_TABLE)
 
         # 2) Try to create brand-new table
@@ -39,7 +40,8 @@ def load_data(df_clean: pd.DataFrame) -> None:
             TARGET_TABLE,
             engine,
             if_exists="fail",  # raises ValueError if table still exists
-            index=False
+            index=False,
+            schema=schema
         )
         logger.info("Created table %s with %d rows", TARGET_TABLE, len(df_clean))
 
@@ -58,7 +60,7 @@ def load_data(df_clean: pd.DataFrame) -> None:
 
     # 4) Post-load enrichment (indexes & views)
 
-    enrich_database()
+    enrich_database(schema, engine)
 
 
 def _insert_ignore_duplicates(df: pd.DataFrame, conn):
