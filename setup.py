@@ -1,31 +1,31 @@
 from setuptools import setup, find_packages
 
 # Read the requirements from the requirements.txt file
-with open("requirements.txt") as f:
-    install_requires = f.read().splitlines()
+# with open("requirements.txt") as f:
+#     install_requires = f.read().splitlines()
 
 setup(
     name="house_price",
     version="0.1.0",
-    description=("An streamlit app for checking city info."),
+    description=("An streamlit app for London house price."),
     author="emily",
     author_email="xiangnan.liu@hotmail.com",
     url="https://github.com/emilyliu75/house_price.git",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=install_requires,
+    install_requires=[
+        "streamlit>=1.35,<2.0",
+        "pandas>=2.2,<2.3",
+        "sqlalchemy>=2.0,<3.0",
+        "psycopg2-binary>=2.9,<2.10",
+    ]
     entry_points={
         "console_scripts": [
             "run_etl=scripts.run_etl:main",
             "run_tests=tests.run_tests:main",
         ],
     },
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    python_requires=">=3.6",
+    python_requires=">=3.10",
 )
 
 
