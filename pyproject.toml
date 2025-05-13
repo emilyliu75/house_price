@@ -1,0 +1,23 @@
+[build-system]
+requires      = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "house_price"
+version         = "0.1.0"
+description     = "Streamlit app for London house prices"
+readme          = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+  "streamlit>=1.35",
+  "psycopg2-binary>=2.9,<2.10",
+  "sqlalchemy>=2.0",
+  "pandas>=2.2,<2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "flake8",
+  "pytest",
+]
