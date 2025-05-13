@@ -18,7 +18,7 @@ setup(
         "pandas>=2.2,<2.3",
         "sqlalchemy>=2.0,<3.0",
         "psycopg2-binary>=2.9,<2.10",
-    ]
+    ],
     entry_points={
         "console_scripts": [
             "run_etl=scripts.run_etl:main",
