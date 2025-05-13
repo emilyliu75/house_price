@@ -92,6 +92,10 @@ def build_address(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop(columns=["saon", "paon", "street"], errors="ignore")
 
 
+def remove_invalid_dates(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop rows where date could not be parsed (NaT)."""
+    return df.dropna(subset=["date"])
+
 def deduplicate(df: pd.DataFrame) -> pd.DataFrame:
     before = len(df)
     df = df.drop_duplicates()
@@ -112,6 +116,7 @@ def clean_house_prices(df_raw: pd.DataFrame) -> pd.DataFrame:
         .pipe(map_codes)
         .pipe(remove_other_types)
         .pipe(build_address)
+        .pipe(remove_invalid_dates)
         .pipe(deduplicate)
         .pipe(remove_non_standard_transaction)
     )
