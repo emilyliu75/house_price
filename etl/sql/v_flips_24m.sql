@@ -42,4 +42,4 @@ SELECT
 FROM paired
 WHERE months_between > 2
   AND months_between <= 24
-  AND (next_price - sale_price) * 100.0 / sale_price <= 1000;
+  AND (next_price - sale_price) * 100.0 / sale_price BETWEEN 20 AND 1000;
