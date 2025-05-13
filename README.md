@@ -41,7 +41,8 @@ interesting discovery:
 there's only one record for outward code N2, which seems a bit weird
 It turned out that's from another borough
 
-
+deployed on streamlit from the branch deployment:
+https://londonhouse.streamlit.app/
 
 reflection:
 How could I deploy or adapt this project into automated cloud environment?

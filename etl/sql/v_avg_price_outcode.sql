@@ -3,5 +3,5 @@ SELECT
   split_part(postcode,' ',1) AS outcode,
   ROUND(AVG(price))          AS avg_price,
   COUNT(*)                   AS n_sales
-FROM clean_house_prices
+FROM emily_capstone
 GROUP BY outcode;

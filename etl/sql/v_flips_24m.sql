@@ -11,7 +11,7 @@ WITH ordered AS (
       PARTITION BY postcode, address
       ORDER BY date
     ) AS rn
-  FROM clean_house_prices
+  FROM emily_capstone
   WHERE address IS NOT NULL
 ),
 paired AS (

@@ -52,7 +52,7 @@ def create_db_engine(connection_params):
         engine = create_engine(
             f"postgresql+psycopg2://{connection_params['user']}"
             f":{connection_params['password']}@{connection_params['host']}"
-            f":{connection_params['port']}/{connection_params['dbname']}?options=-csearch_path%3D{schema}"
+            f":{connection_params['port']}/{connection_params['dbname']}?sslmode=require&options=-csearch_path%3D{schema}"
         )
         logger.setLevel(logging.INFO)
         logger.info("Successfully created the database engine.")
