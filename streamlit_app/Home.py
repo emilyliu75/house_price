@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 from sqlalchemy import text
-from streamlit_app.config import engine
+from config import engine
 from datetime import datetime
 
 st.set_page_config(
