@@ -13,7 +13,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from streamlit_app.db_utils import create_db_engine   # your helper
+from ..utils.db_utils import create_db_engine
 
 load_dotenv()                              # so it works locally, too
 
