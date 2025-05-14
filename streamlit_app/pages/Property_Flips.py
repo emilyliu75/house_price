@@ -23,6 +23,11 @@ def get_top_flips(limit: int = 5000) -> pd.DataFrame:
     return pd.read_sql(sql, engine, params={"n": limit})
 
 def render():
+    st.set_page_config(
+        page_title="Property Flips",
+        page_icon="🏠",
+        layout="wide"
+    )
     st.subheader("Top property flips (≤ 24 months)")
     df = get_top_flips()
     if df.empty:

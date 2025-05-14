@@ -85,11 +85,11 @@ def render():
                               sort=order,
                               scale=alt.Scale(domain=order)),
             tooltip=["year", "property_type", "n_sales"]
-        ).properties(width=110, height=110)
+        ).properties(width=90, height=90)
 )
     pies = base.facet(
         column=alt.Column("year:N",
-                        header=alt.Header(title="Year", labelOrient="bottom")),
+                        header=alt.Header(labelOrient="bottom")),
         columns=5      # show 5 pies in one row
     )
 
