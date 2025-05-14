@@ -2,8 +2,6 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 from sqlalchemy import text
-
-# 👉 Reuse the engine you built in streamlit_app/config.py
 from streamlit_app.config import engine
 
 @st.cache_data(ttl=3600)
@@ -29,8 +27,19 @@ def get_all_data() -> pd.DataFrame:
     return pd.read_sql(sql, engine)
 
 def render():
+    st.set_page_config(
+        page_title="Outward Code",
+        page_icon="🏠",
+        layout="wide"
+    )
     df = get_heatmap_data()
     st.subheader("Average sale price by outward code (last 5 years)")
+    st.markdown(
+        """
+        - The outward code is the first part of a postcode (e.g., SE10, W1A).
+
+        """
+    )
     chart = (
         alt.Chart(df)
            .mark_bar()
