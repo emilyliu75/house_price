@@ -93,13 +93,14 @@ def render():
 
     # 4) Plot
     st.subheader("Average sale price by year and borough")
-    order = (
-    df_trend[df_trend['year'] == 2020]
-    .groupby('borough')['avg_price']
-    .mean()
-    .sort_values(ascending=False)
-    .index.tolist()
-)
+    order = ['Westminster', 'Wandsworth', 'Brent', 'Hackney', 'Greenwich']
+#     order = (
+#     df_trend[df_trend['year'] == 2020]
+#     .groupby('borough')['avg_price']
+#     .mean()
+#     .sort_values(ascending=False)
+#     .index.tolist()
+# )
     chart = (
         alt.Chart(df_trend)
            .mark_line(point=True)

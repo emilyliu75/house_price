@@ -32,13 +32,21 @@ def get_monthly_volumes_by_borough() -> pd.DataFrame:
     return df
 
 def render():
+    st.set_page_config(
+        page_title="Stamp Duty Holiday Impact",
+        page_icon="🏠",
+        layout="wide"
+    )
     st.subheader("Monthly Sales Volume by Borough (5-year view)")
-
     df = get_monthly_volumes_by_borough()
     if df.empty:
         st.info("No data available.")
         return
-
+    st.markdown(
+        """
+        - Stamp Duty Holiday was introduced in July 2020 and ended in September 2021.
+        """
+    )
     # Create a multi-line chart: one line per borough
     chart = (
         alt.Chart(df)
