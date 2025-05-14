@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 import logging
 from utils.logging_utils import setup_logger
-
+from etl.config.db_config import load_db_config
+import os
 
 class DatabaseConnectionError(Exception):
     pass
@@ -40,6 +41,7 @@ def get_db_connection(connection_params):
 
 
 def create_db_engine(connection_params):
+    print("!!!", os.getenv("TARGET_DB_SSLMODE"))
     try:
         if (
             not connection_params.get("user")
@@ -49,7 +51,9 @@ def create_db_engine(connection_params):
         ):
             raise ValueError("Parameter not provided")
         schema = connection_params.get("schema", "public")
-        sslmode  = connection_params.get("sslmode", "require")
+        # sslmode  = connection_params.get("sslmode", "disable")
+        sslmode  = os.getenv("TARGET_DB_SSLMODE")
+
         engine = create_engine(
             f"postgresql+psycopg2://{connection_params['user']}"
             f":{connection_params['password']}@{connection_params['host']}"

@@ -1,6 +1,9 @@
 # template for starting:
 https://github.com/de-2502-a/etl-project-demo
 
+# Data source: HM Land Registry Open Data
+https://landregistry.data.gov.uk/app/ppd/?relative_url_root=%2Fapp%2Fppd
+
 # project setup:
 - create a virtual venv: python -m venv .venv
 - activate the virtual ven: activate .venv/bin/activate
@@ -18,8 +21,7 @@ As a government officer in relevant department, I want to see how the SDLT holid
 As a data analyst,I want to know how much is the average price sold in each outward code.
 
 
-# Data source:
-https://landregistry.data.gov.uk/app/ppd/?relative_url_root=%2Fapp%2Fppd
+
 
 # Data cleaning:
 Initial records:87,907

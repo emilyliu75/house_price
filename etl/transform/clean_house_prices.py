@@ -99,7 +99,7 @@ def remove_invalid_dates(df: pd.DataFrame) -> pd.DataFrame:
 def deduplicate(df: pd.DataFrame) -> pd.DataFrame:
     before = len(df)
     df = df.drop_duplicates()
-    logger.info("Removed %d duplicate rows", before - len(df))
+    # logger.info("Removed %d duplicate rows", before - len(df))
     return df
 
 def remove_non_standard_transaction(df: pd.DataFrame) -> pd.DataFrame:
