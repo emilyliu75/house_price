@@ -1,5 +1,3 @@
-# streamlit_app/pages/borough_analysis.py
-
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -28,6 +26,11 @@ def load_raw_price_data(borough_choice:str) -> pd.DataFrame:
     return df
 
 def render():
+    st.set_page_config(
+        page_title="Borough Breakdown",
+        page_icon="🏠",
+        layout="wide"
+    )
     boroughs = load_borough_list()
     # print(boroughs)
     borough_choice = st.selectbox('Select a borough', options=boroughs, index=0, help="Choose a borough to analyze")
@@ -63,9 +66,34 @@ def render():
         )
         .properties(height=400)
     )
-
-
     st.altair_chart(chart, use_container_width=True)
+
+    # pie chart for volumn
+    st.markdown("#### Sales mix by property type")
+
+    df_pies = (df_sel.groupby(["year", "property_type"], as_index=False)
+                    .agg(n_sales=("price", "count"))
+                    .sort_values(["year", "property_type"]))
+
+    base = (
+    alt.Chart(df_pies)
+        .mark_arc(innerRadius=20)
+        .encode(
+            theta = alt.Theta("n_sales:Q", stack=True, title="Transactions"),
+            color = alt.Color("property_type:N",
+                              title="Property type",
+                              sort=order,
+                              scale=alt.Scale(domain=order)),
+            tooltip=["year", "property_type", "n_sales"]
+        ).properties(width=110, height=110)
+)
+    pies = base.facet(
+        column=alt.Column("year:N",
+                        header=alt.Header(title="Year", labelOrient="bottom")),
+        columns=5      # show 5 pies in one row
+    )
+
+    st.altair_chart(pies, use_container_width=True)
 
 if __name__ == "__main__":
     render()
