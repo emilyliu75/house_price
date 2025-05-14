@@ -110,7 +110,7 @@ def render():
                color=alt.Color("borough:N", title="Borough", sort=order),
                tooltip=["year", "borough", "avg_price", 'n_sales']
            )
-           .properties(height=400)
+           .properties(height=800)
     )
     st.altair_chart(chart, use_container_width=True)
 
