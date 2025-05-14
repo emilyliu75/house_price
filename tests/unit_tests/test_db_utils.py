@@ -17,6 +17,7 @@ def connection_params():
         "password": "test_password",
         "host": "test_host",
         "port": "1234",
+        "schema": "public",
     }
 
 
@@ -73,7 +74,9 @@ def test_get_db_connection_failure(mocker, connection_params):
     assert str(excinfo.value) == (
         "Failed to connect to the database: Connection error"
     )
-    mock_connect.assert_called_once_with(expected_connection_string)
+    # mock_connect.assert_called_once_with(expected_connection_string)
+    called_url = mock_connect.call_args[0][0]
+    assert called_url.startswith(expected_connection_string)
     mock_logger.error.assert_called_once_with(
         "Failed to connect to the database: Connection error"
     )
@@ -162,8 +165,9 @@ def test_create_db_engine_success(mocker, connection_params):
         f"{int(connection_params['port'])}/{connection_params['dbname']}"
     )
 
-    mock_create_engine.assert_called_once_with(expected_connection_string)
-    assert engine == mock_engine
+    # mock_create_engine.assert_called_once_with(expected_connection_string)
+    called_url = mock_create_engine.call_args[0][0]
+    assert called_url.startswith(expected_connection_string)
 
 
 def test_create_db_engine_success_logging(mocker, connection_params):

@@ -13,6 +13,7 @@ def init_test_env():
 
 def test_db_connection_success():
     connection_params = load_db_config()["source_database"]
+    connection_params["sslmode"] = "disable"
     connection = get_db_connection(connection_params)
 
     assert isinstance(connection, sqlalchemy.engine.base.Connection)
@@ -23,6 +24,7 @@ def test_db_connection_success():
 
 def test_db_connection_unavailable():
     connection_params = load_db_config()["source_database"]
+    connection_params["sslmode"] = "disable"
     connection_params["host"] = "unreachable_host"
 
     with pytest.raises(DatabaseConnectionError):
@@ -31,6 +33,7 @@ def test_db_connection_unavailable():
 
 def test_db_connection_already_closed():
     connection_params = load_db_config()["source_database"]
+    connection_params["sslmode"] = "disable"
     connection = get_db_connection(connection_params)
     connection.close()
 
