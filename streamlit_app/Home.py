@@ -92,14 +92,15 @@ def render():
     df_trend["avg_price"] = df_trend["avg_price"].round()
 
     # 4) Plot
+    order = ['Westminster', 'Wandsworth', 'Brent', 'Hackney', 'Greenwich']
     st.subheader("Average sale price by year and borough")
-    order = (
-    df_trend[df_trend['year'] == 2020]
-    .groupby('borough')['avg_price']
-    .mean()
-    .sort_values(ascending=False)
-    .index.tolist()
-)
+#     order = (
+#     df_trend[df_trend['year'] == 2020]
+#     .groupby('borough')['avg_price']
+#     .mean()
+#     .sort_values(ascending=False)
+#     .index.tolist()
+# )
     chart = (
         alt.Chart(df_trend)
            .mark_line(point=True)
@@ -109,7 +110,7 @@ def render():
                color=alt.Color("borough:N", title="Borough", sort=order),
                tooltip=["year", "borough", "avg_price", 'n_sales']
            )
-           .properties(height=400)
+           .properties(height=800)
     )
     st.altair_chart(chart, use_container_width=True)
 
