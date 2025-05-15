@@ -34,7 +34,25 @@ Final shape: 68,910, 9
 there's only one record for outward code N2, which seems a bit weird
 It turned out that's from another borough
 
-deployed on streamlit from the branch deployment:
+# would you go about optimising query execution and performance if the dataset continues to increase?
+I added indexes on postcode, date, borough - the columns that I need to use to filter data to optimising the performance.
+Creating views so that it can save time on execution.
+I used st.cache_data to for caching to eliminate round-trips on every interation
+
+# What error handling and logging have you included in your code and how this could be leveraged?
+My utils.logging_utils.setup_logger() is used for logging, so that errors can be easily spotted in the log.
+DatabaseConfigError, DatabaseConnectionError
+# Are there any security or privacy issues that you need to consider and how would you mitigate them?
+Don't commit .env file to git
+Put any credentials in a file that won't be committed.
+# How this project could be deployed or adapted into an automated cloud environment using the AWS services you have covered?
+I could use CloudFormation or Terraform modules for RDS, ESC service.
+GitHub Actions to build the Docker image, pushes to ECR, then updates the ECS service.
+
+# committing history:
+https://github.com/emilyliu75/house_price/commits/main/
+
+# deployed on streamlit from the branch deployment:
 https://londonhouse.streamlit.app/
 
 reflection:

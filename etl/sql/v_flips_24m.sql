@@ -40,6 +40,6 @@ SELECT
   months_between,
   ROUND((next_price - sale_price) * 100.0 / sale_price, 0)::INT AS pct_gain
 FROM paired
-WHERE months_between > 3
+WHERE months_between > 4
   AND months_between <= 24
   AND (next_price - sale_price) * 100.0 / sale_price BETWEEN 20 AND 1000;
