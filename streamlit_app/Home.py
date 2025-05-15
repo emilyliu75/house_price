@@ -22,7 +22,7 @@ st.markdown(
     - **Borough Breakdown**: Drill down on a single borough
     - **Outward Code**: Average price by outward postcode
     - **Property Filps**: The biggest “flips” in under 24 months
-    - **Stamp Duty Holiday Impact**: Sales volumes before/during/after the stamp‐duty holiday
+    - **Stamp Duty Holiday Impact**: Sales volumes before/during/after the stamp-duty holiday
     """
 )
 

@@ -31,7 +31,6 @@ def enrich_database(schema: str = 'public', engine=None):
         session.close()
 
 
-# ───────────────────────────────────────── helpers
 def _apply_indexes(session):
     #  speed up lookups in Streamlit where you filter or group by postcode, date or borough
     index_sql = [
@@ -45,13 +44,13 @@ def _apply_indexes(session):
 
 
 def _create_views(session):
-    # ── view 1: average price by outward code ─────────────────────────
+    #  view 1: average price by outward code
     avg_sql = import_sql_query(SQL_DIR / "v_avg_price_outcode.sql")
     session.execute(text(avg_sql))
     logger.info("View v_avg_price_outcode created / replaced")
 
 
-    # ── view 2: repeat‐sale flips within 24 months ────────────────────
+    # view 2: repeat‐sale flips within 24 months
     flips_sql = import_sql_query(SQL_DIR / "v_flips_24m.sql")
     session.execute(text(flips_sql))
     logger.info("View v_flips_24m created / replaced")

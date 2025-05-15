@@ -1,7 +1,3 @@
-"""
-Extract raw house-price CSVs for five London boroughs (last five years).
-"""
-
 import os
 import timeit
 import pandas as pd
@@ -13,7 +9,6 @@ from utils.logging_utils import setup_logger, log_extract_success
 # creates a module-level logger named after the module (etl.extract.extract_house_prices)
 logger = setup_logger(__name__, "extract_data.log", level=logging.DEBUG)
 
-# this is a performance budget: 0.0001 s per row. If extraction goes slower, the helper can emit a warning.
 EXPECTED_PER_ROW  = 0.0001
 
 #  this is a readable description of the data type
@@ -28,11 +23,11 @@ RAW_FILES = {
     "Westminster":  "unclean_westminster.csv",
 }
 
-# signalling 'private/internal'. Avoids accidental import such as `from extract import *` (wildcards skip names that start with `_`)
+
 def _load_one(borough: str, filename: str) -> pd.DataFrame:
     path = os.path.join(os.path.dirname(__file__), "../../data/raw", filename)
     df = pd.read_csv(path)
-    df["borough"] = borough         # tag for downstream grouping
+    df["borough"] = borough
     return df
 
 

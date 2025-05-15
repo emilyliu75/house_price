@@ -41,7 +41,7 @@ def get_db_connection(connection_params):
 
 
 def create_db_engine(connection_params):
-    print("!!!", os.getenv("TARGET_DB_SSLMODE"))
+    # print("!!!", os.getenv("TARGET_DB_SSLMODE"))
     try:
         if (
             not connection_params.get("user")

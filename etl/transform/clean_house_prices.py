@@ -56,8 +56,6 @@ def select_and_rename(df: pd.DataFrame) -> pd.DataFrame:
           .rename(columns={c: KEEP_AND_RENAME[c] for c in present})
     )
 
-
-
 def standardise_types(df: pd.DataFrame) -> pd.DataFrame:
     # convert price / date to numeric / date for analysis
     # errors="coerce" → non-convertible values (e.g. "—" or "N/A") become NaN instead of raising an exception.
