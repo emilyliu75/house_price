@@ -9,7 +9,6 @@ from pathlib import Path
 
 SQL_DIR = Path(__file__).parents[1] / "sql"
 
-# Configure the logger
 logger = setup_logger(__name__, "database_query.log", level=logging.DEBUG)
 
 TARGET_TABLE = "emily_capstone"

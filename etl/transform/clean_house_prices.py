@@ -1,11 +1,3 @@
-"""
-Transform raw London house-price data.
-
-Keeps just ten columns:
-price_paid, deed_date, postcode, property_type, new_build,
-estate_type, saon, paon, street, borough
-"""
-
 import pandas as pd
 import logging
 from utils.logging_utils import setup_logger
