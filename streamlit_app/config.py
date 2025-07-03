@@ -15,7 +15,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from utils.db_utils import create_db_engine
 
-load_dotenv()                              # so it works locally, too
+load_dotenv(".env.dev")                              # so it works locally, too
 
 params = {
     "user":     os.environ["SOURCE_DB_USER"],
@@ -24,18 +24,16 @@ params = {
     "port":     os.environ.get("SOURCE_DB_PORT", "5432"),
     "dbname":   os.environ["SOURCE_DB_NAME"],
     "schema":   os.environ.get("SOURCE_DB_SCHEMA", "public"),  # crucial
-    # you can put extra flags here ↓↓↓
     "sslmode":  "require",
 }
 
 
 @st.cache_resource(show_spinner=False)
 def get_engine() -> "sqlalchemy.Engine":
-    # db_utils.create_db_engine() ignores unknown keys, so we pop sslmode
     sslmode = params.pop("sslmode", None)
     engine = create_db_engine(params)
 
-    if sslmode:                       # add sslmode after the fact
+    if sslmode:
         engine.url = engine.url.set(query={"sslmode": sslmode,
                                            **engine.url.query})
     return engine
